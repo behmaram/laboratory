@@ -13,5 +13,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('login', 'UserController@signUp');
+Route::post('sign-up', 'UserController@signUp');
+Route::post('sign-in', 'UserController@signIn');
 
