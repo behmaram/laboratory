@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTestsTable extends Migration
+class CreateDoctorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class CreateTestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tests', function (Blueprint $table) {
+        Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('en_name');
-            $table->text('description');
-            $table->double('high');
-            $table->double('low');
-            $table->integer('estimate');
-            $table->integer('price');
+            $table->string("name");
             $table->integer("expertise_code");
+            $table->text("address");
+            $table->string("phone_number");
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ class CreateTestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tests');
+        Schema::dropIfExists('doctors');
     }
 }

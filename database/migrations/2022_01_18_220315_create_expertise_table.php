@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurnsTable extends Migration
+class CreateExpertiseTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateTurnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('turns', function (Blueprint $table) {
+        Schema::create('expertise', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('test_id');
-            $table->timestamp('turn_time');
-            $table->integer('result')->nullable();
-            $table->integer('done');
+            $table->string("name");
+            $table->integer("code");
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateTurnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turns');
+        Schema::dropIfExists('expertise');
     }
 }
