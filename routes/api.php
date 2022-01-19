@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('sign-up', 'UserController@signUp');
 Route::post('sign-in', 'UserController@signIn');
 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('nurse', 'NurseController@get');
+    Route::post('nurse', 'NurseController@create');
+    Route::put('nurse/{id}', 'NurseController@update');
+    Route::delete('nurse/{id}', 'NurseController@delete');
+});
+

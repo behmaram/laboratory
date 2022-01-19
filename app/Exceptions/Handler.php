@@ -75,7 +75,7 @@ class Handler extends ExceptionHandler
             if ($exception instanceof AuthorizationException) {
                 return response([
                     'data' => '',
-                    'message' => __('messages.access_denied'),
+                    'message' => 'دسترسی ندارید',
                     'status' => false
                 ], $exception->getCode() ?? Response::HTTP_UNAUTHORIZED);
             }
@@ -83,7 +83,7 @@ class Handler extends ExceptionHandler
             if ($exception instanceof AuthenticationException) {
                 return response([
                     'data' => '',
-                    'message' => __('messages.access_denied'),
+                    'message' => 'دسترسی ندارید',
                     'status' => false
                 ], 401);
             }
