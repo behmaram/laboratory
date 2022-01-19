@@ -13,7 +13,15 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-    Route::post('login', 'UserController@signUp');
+Route::post('sign-up', 'UserController@signUp');
+Route::post('sign-in', 'UserController@signIn');
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('nurse', 'NurseController@get');
+    Route::post('nurse', 'NurseController@create');
+    Route::put('nurse/{id}', 'NurseController@update');
+    Route::delete('nurse/{id}', 'NurseController@delete');
+});
 
     // --------------------- test api--------------------
     Route::group(['prefix' => 'test'], function () {
@@ -27,4 +35,3 @@ use Illuminate\Support\Facades\Route;
     });
    //---------------------- end turn api-----------------
 
-   
