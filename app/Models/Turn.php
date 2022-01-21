@@ -9,7 +9,7 @@ class Turn extends Model
 {
     use HasFactory;
 
-    protected $table='turns';
+    protected $table = 'turns';
 
     protected $fillable = [
         'user_id',
@@ -19,8 +19,9 @@ class Turn extends Model
         'done'
     ];
 
-    public function checkReservation($turnTime){
-        $record = self::where('done',0)->where('turn_time',$turnTime)->first();
+    public function checkReservation($turnTime)
+    {
+        $record = self::where('done', 0)->where('turn_time', $turnTime)->first();
         return $record;
     }
 }
