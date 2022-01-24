@@ -23,11 +23,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('nurse/{id}', 'NurseController@delete');
 });
 
+Route::middleware(['auth', 'role:nurse'])->group(function () {
+    Route::post('user-test', 'TurnController@nurseSetTurn');
+});
+
+//Route::middleware(['auth', 'role:user'])->group(function () {
     // --------------------- test api--------------------
     Route::group(['prefix' => 'test'], function () {
         Route::get('/list', 'TestController@getTestList'); // login
     });
-   //---------------------- end test api-----------------
+    //---------------------- end test api-----------------
 
     // --------------------- turn api--------------------
     Route::group(['prefix' => 'turn'], function () {
@@ -46,3 +51,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/list', 'DoctorController@getDoctors'); // login 
     });
    //------------------------ end doctor api-----------------
+    
+//});

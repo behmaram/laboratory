@@ -10,7 +10,7 @@ class Turn extends Model
 {
     use HasFactory;
 
-    protected $table='turns';
+    protected $table = 'turns';
 
     protected $fillable = [
         'user_id',
