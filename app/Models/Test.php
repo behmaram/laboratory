@@ -16,11 +16,27 @@ class Test extends Model
         'high',
         'low',
         'estimate',
-        'price'
+        'price',
+        'expertise_code'
     ];
     public function getAll(){
 
         $list = self::all();
         return $list;
+    }
+    public function checkResult($id,$result){
+        $record = self::find($id);
+        if ($result <= $record->high && $result >= $record->low){
+            // ل
+            return ['key' => 1 , 'value' => "نرمال"];
+        }
+        if ($result > $record->high && $result > $record->low){
+            // بالاتر از حد نرمال
+            return ['key' => 2 , 'value' => "بالاتر از حد نرمال"];
+        }
+        if ($result < $record->high && $result < $record->low){
+            // پایین تر از حد نرمال
+            return ['key' => 0 , 'value' => "پایین از حد نرمال"];
+        }
     }
 }

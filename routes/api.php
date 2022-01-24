@@ -25,13 +25,24 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // --------------------- test api--------------------
     Route::group(['prefix' => 'test'], function () {
-        Route::get('/list', 'TestController@getTestList');
+        Route::get('/list', 'TestController@getTestList'); // login
     });
    //---------------------- end test api-----------------
 
     // --------------------- turn api--------------------
     Route::group(['prefix' => 'turn'], function () {
-        Route::post('/set-turn', 'TurnController@setTurn');
+        Route::post('/set-turn', 'TurnController@setTurn'); // user
+        Route::post('/list-turn', 'TurnController@getDoneTurn'); // user
+        Route::get('/get-result/{id}', 'TurnController@getResult'); //user
+    });
+    Route::group(['prefix' => 'nurse/turn'], function () {
+        Route::get('/all/{filter}', 'TurnController@getTests'); // nurse
+        Route::post('/set-result', 'TurnController@setResult'); // nurse
     });
    //---------------------- end turn api-----------------
 
+       // --------------------- doctor api-------------------- 
+    Route::group(['prefix' => 'doctor'], function () {
+        Route::get('/list', 'DoctorController@getDoctors'); // login 
+    });
+   //------------------------ end doctor api-----------------

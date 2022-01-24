@@ -16,4 +16,14 @@ class Doctor extends Model
         'address',
         'phone_number'
     ];
+
+    public function getAll(){
+        $record = self::all();
+        return $record;
+    }
+    public function getRelevantDoctors($code){
+        $records = self::where('expertise_code',$code)->selectRaw('name')->get();
+        return $records;
+
+    }
 }
