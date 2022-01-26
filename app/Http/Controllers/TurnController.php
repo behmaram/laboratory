@@ -27,6 +27,13 @@ class TurnController extends Controller
         ]);
         $turnTime = $request->turn_time;
         $testId = $request->test_id;
+       
+        if ($turnTime <= now()){
+            return response()->json([
+                'data' => '',
+                'message' => 'تایم غیر مجاز (مجاز به انتخاب تایم گذشته نیستید.)',
+                'status' => true]);
+        }
         $record = $this->turnObj->checkReservation($turnTime);
        
         if ($record){
@@ -51,10 +58,10 @@ class TurnController extends Controller
             }
             $testCondition = 'شرایط آزمایش '.$testCondition->name.': '.$testCondition->description;
             $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
-            $messageObj->sendEmail($user->email, $emailData ,'conditionTest');
+            $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
           
           } catch (\Exception $e) {
-          
+            \Log::info($e);
              \Log::info("error in sending condition of test");
           }
         return response()->json([
@@ -123,7 +130,7 @@ class TurnController extends Controller
         try {
             $messageObj = new MessageClass();
             $user = User::find($record->user_id);
-            $emailData = array('title' => 'جواب آزمایشگاه الزهرا');
+            $emailData = array('title' => ' آزمایشگاه الزهرا');
             $messageObj->sendEmail($user->email, $emailData , 'email.emailResult');
         }catch(\Exeption $e){
             \Log::info("error in sending Email Result");
