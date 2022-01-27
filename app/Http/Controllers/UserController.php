@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\Turn;
 use App\Models\User;
 use Carbon\Carbon;
@@ -63,31 +64,44 @@ class UserController extends Controller
 
     public function purchase()
     {
-        $user = Auth::user();
-        $user_tests = Turn::where('user_id', $user->id)->where('done', 0)->where('turn_time', '>=', Carbon::now())->get();
+        $user_id = Auth::id();
+        $user_tests = Turn::where('user_id', $user_id)->where('done', 0)->where('payment', 0)->where('turn_time', '>=', Carbon::now())->get();
 
+        $prices = [];
+        $transactions = [];
         foreach ($user_tests as $user_test) {
+            $transactions[] = Transaction::create([
+                'user_id' => $user_id,
+                'test_id' => $user_test->test->id,
+                'price' => $user_test->test->price,
+            ]);
             $prices[] = $user_test->test->price;
         }
 
         $invoice = (new Invoice)->amount(array_sum($prices));
 
-        $payment = Payment::callbackUrl(route('purchase.result'));
-        return $payment->purchase($invoice, function ($driver, $transactionId) {
-
+        $payment = Payment::callbackUrl(route('purchase.result', ['userId' => $user_id]));
+        return $payment->purchase($invoice, function ($driver, $transactionId) use ($transactions) {
+//            foreach ($transactions as $transaction) {
+//                Transaction::where('id', $transaction->id)->first()->update(['transaction_id' => $transactionId]);
+//            }
         })->pay()->render();
     }
 
-    public function result()
+    public function result($userId)
     {
         try {
+            $paids = Turn::where('user_id', $userId)->where('payment', 0)->get();
+            $transaction = Transaction::where('user_id', $userId)->where('status', 0)->first();
+            $receipt = Payment::amount($transaction->price)->transactionId($transaction->transaction_id)->verify();
 
+            foreach ($paids as $paid) {
+                $paid->update(['payment' => 1, 'status' => 1, 'reference_id' => $receipt->getReferenceId()]);
+            }
             return view('success');
-
         } catch (InvalidPaymentException $exception) {
             if ($exception->getCode() < 0) {
-                $transaction = $this->planRepository->failed_status($id);
-                return view('error', ['user_id' => $transaction->user_id, 'error' => $exception->getMessage()]);
+                return view('error');
             }
         }
     }

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('sign-up', 'UserController@signUp');
 Route::post('sign-in', 'UserController@signIn');
-Route::get('/purchase/result', [UserController::class, 'result'])->name('purchase.result');
+Route::get('/purchase/result/{userId}', [UserController::class, 'result'])->name('purchase.result');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('nurse', 'NurseController@get');

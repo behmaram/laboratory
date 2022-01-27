@@ -15,6 +15,12 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
+            $table->integer('test_id');
+            $table->integer('price')->nullable();
+            $table->integer('status')->default(0);
+            $table->integer('transaction_id')->nullable();
+            $table->integer('reference_id')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transcations');
+        Schema::dropIfExists('transactions');
     }
 }

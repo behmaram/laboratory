@@ -17,7 +17,8 @@ class Turn extends Model
         'test_id',
         'turn_time',
         'result',
-        'done'
+        'done',
+        'payment',
     ];
 
     public function checkReservation($turnTime)
