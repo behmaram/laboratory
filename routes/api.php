@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('sign-up', 'UserController@signUp');
 Route::post('sign-in', 'UserController@signIn');
+Route::get('/purchase/result', [UserController::class, 'result'])->name('purchase.result');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('nurse', 'NurseController@get');
@@ -27,7 +29,7 @@ Route::middleware(['auth', 'role:nurse'])->group(function () {
     Route::post('user-test', 'TurnController@nurseSetTurn');
 });
 
-//Route::middleware(['auth', 'role:user'])->group(function () {
+Route::middleware(['auth', 'role:user'])->group(function () {
     // --------------------- test api--------------------
     Route::group(['prefix' => 'test'], function () {
         Route::get('/list', 'TestController@getTestList'); // login
@@ -46,10 +48,13 @@ Route::middleware(['auth', 'role:nurse'])->group(function () {
     });
    //---------------------- end turn api-----------------
 
-       // --------------------- doctor api-------------------- 
+       // --------------------- doctor api--------------------
     Route::group(['prefix' => 'doctor'], function () {
-        Route::get('/list', 'DoctorController@getDoctors'); // login 
+        Route::get('/list', 'DoctorController@getDoctors'); // login
     });
    //------------------------ end doctor api-----------------
-    
-//});
+
+    Route::post('purchase', 'UserController@purchase');
+
+
+});
