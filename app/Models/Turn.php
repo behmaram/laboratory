@@ -70,9 +70,11 @@ class Turn extends Model
         return $records;
     }
 
-    public function doingTest()
-    {
-        $allTestsTimeTorun = self::where('done', 0)->where('turn_time', '>=', Carbon::now());
+    public function doingTest(){
+
+        $allTestsTimeTorun = self::where('done',0)->where('turn_time','<=',Carbon::now())->get(); // شرط 1 بودن ستون پرداخت
+        return $allTestsTimeTorun;
+
     }
 
     public function getHourFromDate($time)

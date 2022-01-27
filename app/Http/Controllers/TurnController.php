@@ -53,12 +53,12 @@ class TurnController extends Controller
             }
             $testCondition = 'شرایط آزمایش ' . $testCondition->name . ': ' . $testCondition->description;
             $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
-            $messageObj->sendEmail($user->email, $emailData, 'conditionTest');
+            $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
 
-        } catch (\Exception $e) {
-
-            \Log::info("error in sending condition of test");
-        }
+          } catch (\Exception $e) {
+            \Log::info($e);
+             \Log::info("error in sending condition of test");
+          }
         return response()->json([
             'data' => $testCondition,
             'message' => 'نوبت آزمایش شما با موفقیت ثبت شد.',
@@ -76,9 +76,8 @@ class TurnController extends Controller
             'status' => true]);
 
     }
+    public function getResult($testId){
 
-    public function getResult($testId)
-    {
         $record = $this->turnObj->find($testId);
         if ($record) {
             if (is_null($record->result)) {
@@ -130,9 +129,9 @@ class TurnController extends Controller
         try {
             $messageObj = new MessageClass();
             $user = User::find($record->user_id);
-            $emailData = array('title' => 'جواب آزمایشگاه الزهرا');
-            $messageObj->sendEmail($user->email, $emailData, 'email.emailResult');
-        } catch (\Exeption $e) {
+            $emailData = array('title' => ' آزمایشگاه الزهرا');
+            $messageObj->sendEmail($user->email, $emailData , 'email.emailResult');
+        }catch(\Exeption $e){
             \Log::info("error in sending Email Result");
         }
 
