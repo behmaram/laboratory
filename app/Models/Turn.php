@@ -32,7 +32,7 @@ class Turn extends Model
     // Users did these tests
     public function getAllWithoutResult($filter)
     {
-        $records = self::where('done', 1)
+        $records = self::where('done', 1)->where('payment', 1)
             ->leftJoin('users', 'users.id', '=', 'turns.user_id')
             ->leftJoin('tests', 'tests.id', '=', 'turns.test_id')
             ->selectRaw('users.name as user_name,
@@ -61,7 +61,7 @@ class Turn extends Model
 
     public function getDoneTurnByUserId($userId, $hasResult)
     {
-        $records = self::where('user_id', $userId)->where('done', 1)
+        $records = self::where('user_id', $userId)->where('done', 1)->where('payment', 1)
             ->leftJoin('tests', 'tests.id', '=', 'turns.test_id');
         if ($hasResult == true) {
             $records = $records->whereNotNull('result');
@@ -73,7 +73,7 @@ class Turn extends Model
 
     public function doingTest(){
 
-        $allTestsTimeTorun = self::where('done',0)->where('turn_time','<=',Carbon::now())->get(); // شرط 1 بودن ستون پرداخت
+        $allTestsTimeTorun = self::where('done',0)->where('payment', 1)->where('turn_time','<=',Carbon::now())->get(); // شرط 1 بودن ستون پرداخت
         return $allTestsTimeTorun;
 
     }

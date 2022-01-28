@@ -12,7 +12,7 @@ use Shetabit\Multipay\Exceptions\InvalidPaymentException;
 use Shetabit\Multipay\Invoice;
 use Shetabit\Payment\Facade\Payment;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-
+use App\Classes\MessageClass;
 class UserController extends Controller
 {
     public function __construct(Turn $turnObj)
@@ -95,9 +95,33 @@ class UserController extends Controller
             $transaction = Transaction::where('user_id', $userId)->where('status', 0)->first();
             $receipt = Payment::amount($transaction->price)->transactionId($transaction->transaction_id)->verify();
 
+            $messageObj = new MessageClass();
+            $testCondition = '';
             foreach ($paids as $paid) {
+
+                    $user = User::find($paid->user_id);
+                    $testInfo = $this->testObj->find($paid->id);
+                    $testCondition .= 'شرایط آزمایش '.$testInfo->name.' : ';
+                    if (is_null($testInfo->description)){
+                        $testCondition .= "شرایط خاصی ندارد.";
+                    }
+                    else{
+                        $testCondition .=  $testInfo->description;
+                    }
+                   
+                    $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
+
+        
+                  
                 $paid->update(['payment' => 1, 'status' => 1, 'reference_id' => $receipt->getReferenceId()]);
             }
+            try {
+            $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
+            $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
+            } catch (\Exception $e) {
+                \Log::info($e);
+                 \Log::info("error in sending condition of test");
+              }
             return view('success');
         } catch (InvalidPaymentException $exception) {
             if ($exception->getCode() < 0) {

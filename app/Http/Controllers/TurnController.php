@@ -44,25 +44,28 @@ class TurnController extends Controller
             'done' => 0
 
         ]);
-        try {
-            $messageObj = new MessageClass();
-            $user = User::find($userId);
-            $testInfo = $this->testObj->find($testId);
-            if (is_null($testInfo->description)){
-                $testCondition->description = "شرایط خاصی ندارد.";
-            }
-            
-            $testCondition = 'شرایط آزمایش '.$testInfo->name.' : '.$testInfo->description;
-            $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
-            $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
-            $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
+        // try {
+        //     $messageObj = new MessageClass();
+        //     $user = User::find($userId);
+        //     $testInfo = $this->testObj->find($testId);
+        //     $testCondition = 'شرایط آزمایش '.$testInfo->name.' : ';
+        //     if (is_null($testInfo->description)){
+        //         $testCondition .= "شرایط خاصی ندارد.";
+        //     }
+        //     else{
+        //         $testCondition .=  $testInfo->description;
+        //     }
+           
+        //     $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
+        //     $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
+        //     $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
 
-          } catch (\Exception $e) {
-            \Log::info($e);
-             \Log::info("error in sending condition of test");
-          }
+        //   } catch (\Exception $e) {
+        //     \Log::info($e);
+        //      \Log::info("error in sending condition of test");
+        //   }
         return response()->json([
-            'data' => $testCondition,
+            'data' => '',
             'message' => 'نوبت آزمایش شما با موفقیت ثبت شد.',
             'status' => true]);
     }
