@@ -17,7 +17,7 @@ class CreateTestsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('en_name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->double('high');
             $table->double('low');
             $table->integer('estimate');

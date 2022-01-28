@@ -17,7 +17,7 @@ class TestsSeeder extends Seeder
             0 => array(
                 'name' => 'سدیم',
                 'en_name' => 'NA',
-                'description' => '',
+                'description' => null,
                 'high' => '145',
                 'low' => '136',
                 'estimate' => 1,
@@ -27,7 +27,7 @@ class TestsSeeder extends Seeder
             1 => array(
                 'name' => 'پتاسیم',
                 'en_name' => 'K',
-                'description' => '',
+                'description' => null,
                 'high' => '5',
                 'low' => '3.5',
                 'estimate' => 1,
@@ -47,7 +47,7 @@ class TestsSeeder extends Seeder
             3 => array(
                 'name' => 'کراتینین',
                 'en_name' => 'Creatinine',
-                'description' => '',
+                'description' => null,
                 'high' => '1.3',
                 'low' => '0.6',
                 'estimate' => 2,
@@ -68,7 +68,7 @@ class TestsSeeder extends Seeder
             5 => array(
                 'name' => 'هموگلوبین گلیکوزیله',
                 'en_name' => 'HbA1c',
-                'description' => '',
+                'description' => null,
                 'high' => '120',
                 'low' => '70',
                 'estimate' => 2,
@@ -78,7 +78,7 @@ class TestsSeeder extends Seeder
             6 => array(
                 'name' => 'تری گلیسرید',
                 'en_name' => 'Triglycerides',
-                'description' => '',
+                'description' => null,
                 'high' => '249',
                 'low' => '150',
                 'estimate' => 3,
@@ -127,7 +127,7 @@ class TestsSeeder extends Seeder
             10 => array(
                 'name' => 'تیروکسین',
                 'en_name' => 'T4',
-                'description' => '',
+                'description' => null,
                 'high' => '12',
                 'low' => '5',
                 'estimate' => 4,
@@ -137,7 +137,7 @@ class TestsSeeder extends Seeder
             11 => array(
                 'name' => 'تری یدوتیرونین',
                 'en_name' => 'T3',
-                'description' => '',
+                'description' => null,
                 'high' => '4',
                 'low' => '2',
                 'estimate' => 2,

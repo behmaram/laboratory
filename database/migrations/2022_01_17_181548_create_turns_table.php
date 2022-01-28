@@ -17,7 +17,7 @@ class CreateTurnsTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('test_id');
-            $table->unsignedBigInteger('turn_time');
+            $table->timestamps('turn_time');
             $table->integer('result')->nullable();
             $table->integer('done');
             $table->timestamps();

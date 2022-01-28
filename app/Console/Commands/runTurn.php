@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Turn;
-use App\Models\User;
-use App\Classes\MessageClass;
+//use App\Models\User;
+//use App\Classes\MessageClass;
 class runTurn extends Command
 {
     /**
@@ -40,8 +40,8 @@ class runTurn extends Command
     public function handle()
     {
         $turnObj = new Turn();
-        $messageObj = new MessageClass();
-        $userObj = new User();
+      //  $messageObj = new MessageClass();
+      //  $userObj = new User();
         $allTestsTimeTorun =$turnObj->doingTest();
        
         if ($allTestsTimeTorun){

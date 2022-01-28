@@ -52,11 +52,13 @@ class TurnController extends Controller
         try {
             $messageObj = new MessageClass();
             $user = User::find($userId);
-            $testCondition = $this->testObj->find($testId);
-            if (is_null($testCondition->description)){
+            $testInfo = $this->testObj->find($testId);
+            if (is_null($testInfo->description)){
                 $testCondition->description = "شرایط خاصی ندارد.";
             }
-            $testCondition = 'شرایط آزمایش '.$testCondition->name.': '.$testCondition->description;
+            
+            $testCondition = 'شرایط آزمایش '.$testInfo->name.' : '.$testInfo->description;
+            $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
             $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
             $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
           

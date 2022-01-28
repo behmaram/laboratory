@@ -53,3 +53,12 @@ Route::middleware(['auth', 'role:nurse'])->group(function () {
    //------------------------ end doctor api-----------------
     
 //});
+    //-------------------------- device api -------------------------
+    Route::group(['prefix' => 'device'], function () {
+        Route::post('/create', 'DeviceController@create'); //nurse
+        Route::get('/list', 'DeviceController@get');
+        Route::post('/end', 'DeviceController@notifForEnd'); // nurse
+        Route::post('/become-end', 'DeviceController@notifForBecomeToEnd'); // nurse
+        Route::post('/broken', 'DeviceController@notifForBroken'); // nurse
+    });
+    //-------------------------end device api -----------------------
