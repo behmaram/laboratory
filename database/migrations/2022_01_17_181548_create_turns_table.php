@@ -15,8 +15,8 @@ class CreateTurnsTable extends Migration
     {
         Schema::create('turns', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('test_id');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('test_id')->references('id')->on('tests');
             $table->unsignedBigInteger('turn_time');
             $table->integer('result')->nullable();
             $table->integer('done');
