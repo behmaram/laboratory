@@ -31,16 +31,16 @@ class RunTest implements ShouldQueue
      */
     public function handle()
     {
-       
+
         $turnObj = new Turn();
         $messageObj = new MessageClass();
         $userObj = new User();
-        $allTestsTimeTorun =$turnObj->doingTest();
+        $allTestsTimeTorun = $turnObj->doingTest();
         foreach ($allTestsTimeTorun as $test) {
-           $test->update([
-               'done'=>1
-           ]);
-           \Log::info("run test".$test->id);
+            $test->update([
+                'done' => 1
+            ]);
+            \Log::info("run test" . $test->id);
         }
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurnsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateTurnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('turns', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('test_id')->references('id')->on('tests');
-            $table->timestamps('turn_time');
-            $table->integer('result')->nullable();
-            $table->integer('done');
-            $table->integer('payment');
+            $table->integer('price')->nullable();
+            $table->integer('status')->default(0);
+            $table->integer('transaction_id')->nullable();
+            $table->integer('reference_id')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateTurnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turns');
+        Schema::dropIfExists('transactions');
     }
 }

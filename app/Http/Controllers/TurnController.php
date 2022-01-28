@@ -12,31 +12,26 @@ use Illuminate\Support\Facades\Auth;
 
 class TurnController extends Controller
 {
-    public function __construct(Turn $turnObj,Test $testObj,Doctor $doctorObj)
+    public function __construct(Turn $turnObj, Test $testObj, Doctor $doctorObj)
     {
         $this->turnObj = $turnObj;
         $this->testObj = $testObj;
         $this->doctorObj = $doctorObj;
-        
     }
-    public function setTurn(Request $request){
+
+    public function setTurn(Request $request)
+    {
         $userId = auth()->user()->id;
+
         $this->validate($request, [
             'test_id' => 'required',
             'turn_time' => 'required',
         ]);
         $turnTime = $request->turn_time;
         $testId = $request->test_id;
-       
-        if ($turnTime <= now()){
-            return response()->json([
-                'data' => '',
-                'message' => 'تایم غیر مجاز (مجاز به انتخاب تایم گذشته نیستید.)',
-                'status' => true]);
-        }
         $record = $this->turnObj->checkReservation($turnTime);
-       
-        if ($record){
+
+        if ($record) {
             return response()->json([
                 'data' => '',
                 'message' => 'زمان انتخابی شما از قبل رزو شده است. لطفا تایم دیگری را انتخاب کنید',
@@ -47,7 +42,7 @@ class TurnController extends Controller
             'test_id' => $testId,
             'turn_time' => $turnTime,
             'done' => 0
-           
+
         ]);
         try {
             $messageObj = new MessageClass();
@@ -61,7 +56,7 @@ class TurnController extends Controller
             $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
             $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
             $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');
-          
+
           } catch (\Exception $e) {
             \Log::info($e);
              \Log::info("error in sending condition of test");
@@ -71,51 +66,54 @@ class TurnController extends Controller
             'message' => 'نوبت آزمایش شما با موفقیت ثبت شد.',
             'status' => true]);
     }
-    public function getDoneTurn(Request $request){
+
+    public function getDoneTurn(Request $request)
+    {
         $userId = auth()->user()->id;
-        $records = $this->turnObj->getDoneTurnByUserId($userId,$request->hasResult);
+        $records = $this->turnObj->getDoneTurnByUserId($userId, $request->hasResult);
 
         return response()->json([
             'data' => $records,
             'message' => '',
             'status' => true]);
-      
+
     }
     public function getResult($testId){
 
         $record = $this->turnObj->find($testId);
-        if ($record){
-        if (is_null($record->result)){
+        if ($record) {
+            if (is_null($record->result)) {
+
+                return response()->json([
+                    'data' => '',
+                    'message' => 'جواب آزمایش شما هنوز آماده نیست.',
+                    'status' => true]);
+            }
+            $analysis = $this->testObj->checkResult($record->test_id, $record->result);
+            $testInfo = $this->testObj->find($record->test_id);
+            $message = ' نتیجه آزمایش شما' . $analysis['value'] . ' میباشد.';
+            if ($analysis['key'] == 0 || $analysis['key'] == 2) {
+                $doctors = $this->doctorObj->getRelevantDoctors($testInfo->expertise_code);
+                $message .= ' برای رفع مشکل مربوطه میتوانید به دکترهای معرفی شده مراجعه فرمایید.';
+                foreach ($doctors as $doctor) {
+                    $message .= $doctor->name . ' _ ';
+
+                }
+                $record['doctors'] = $doctors;
+
+            }
 
             return response()->json([
-                'data' => '',
-                'message' => 'جواب آزمایش شما هنوز آماده نیست.',
+                'data' => $record,
+                'message' => $message,
                 'status' => true]);
         }
-        $analysis = $this->testObj->checkResult($record->test_id,$record->result);
-        $testInfo = $this->testObj->find($record->test_id);
-        $message = ' نتیجه آزمایش شما'. $analysis['value'] .' میباشد.';
-        if ($analysis['key'] == 0 || $analysis['key'] == 2){
-            $doctors= $this->doctorObj->getRelevantDoctors($testInfo->expertise_code);
-            $message .= ' برای رفع مشکل مربوطه میتوانید به دکترهای معرفی شده مراجعه فرمایید.';
-            foreach ($doctors as $doctor) {
-                $message .= $doctor->name .' _ ';
-                
-            }
-            $record['doctors'] = $doctors;
-            
-        }
-        
-        
-        return response()->json([
-            'data' => $record,
-            'message' => $message,
-            'status' => true]);
     }
-    }
+
     // _____________________________________ nurse Api ____________________________________//
-    
-    public function getTests($filter){
+
+    public function getTests($filter)
+    {
 
         $testUsers = $this->turnObj->getAllWithoutResult($filter);
 
@@ -124,11 +122,12 @@ class TurnController extends Controller
             'message' => '',
             'status' => true]);
     }
-    
-    public function setResult(Request $request){
-    
-        $record = $this->turnObj->setResult($request->id,$request->result);
-        
+
+    public function setResult(Request $request)
+    {
+
+        $record = $this->turnObj->setResult($request->id, $request->result);
+
         try {
             $messageObj = new MessageClass();
             $user = User::find($record->user_id);
@@ -158,7 +157,7 @@ class TurnController extends Controller
         if ($record) {
             return response()->json([
                 'data' => '',
-                'message' => 'زمان انتخابی شما از قبل رزو شده است. لطفا تایم دیگری را انتخاب کنید',
+                'message' => 'زمان انتخابی شما از قبل رزرو شده است. لطفا تایم دیگری را انتخاب کنید',
                 'status' => true]);
         }
         $this->turnObj->create([
