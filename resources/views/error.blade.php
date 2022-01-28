@@ -70,7 +70,6 @@
     <div class="space"></div>
     <h1>پرداخت ناموفق</h1>
     <div class="space"></div>
-    <a href="">بازگشت به صفحه اصلی</a>
 </div>
 </body>
 </html>

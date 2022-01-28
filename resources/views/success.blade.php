@@ -8,50 +8,56 @@
     <link rel="stylesheet" href="{{ asset('custom.css') }}">
     <title>{{__('Payment successfully')}}</title>
     <style>
-        body{
+        body {
             direction: rtl;
             text-align: right;
-            background:#1384c9;
+            background: #1384c9;
         }
-        .card{
-            padding:15px;
-            width:350px;
-            height:600px;
-            background:#fff;
-            position:relative;
-            margin:25px auto;
-            border-radius:10px;
+
+        .card {
+            padding: 15px;
+            width: 350px;
+            height: 600px;
+            background: #fff;
+            position: relative;
+            margin: 25px auto;
+            border-radius: 10px;
         }
-        .card h1{
+
+        .card h1 {
             text-align: center;
-            color:#4CAF50;
+            color: #4CAF50;
         }
-        .card a{
+
+        .card a {
             position: absolute;
-            width:calc(100% - 30px);
-            padding:10px 0;
+            width: calc(100% - 30px);
+            padding: 10px 0;
             font-weight: bold;
             text-align: center;
-            text-decoration:none;
-            background:#1384c9;
-            color:#fff;
+            text-decoration: none;
+            background: #1384c9;
+            color: #fff;
             bottom: 15px;
-            border-radius:5px;
-            left:0;
+            border-radius: 5px;
+            left: 0;
             right: 0;
             margin: auto;
         }
-        .space{
-            height:2px;
+
+        .space {
+            height: 2px;
             width: 300px;
-            margin:auto;
-            background:#4CAF50;
+            margin: auto;
+            background: #4CAF50;
         }
-        .payment_id{
+
+        .payment_id {
             text-align: center;
             font-weight: bold;
         }
-        .logo{
+
+        .logo {
             text-align: center;
             margin-bottom: 25px;
         }
@@ -62,8 +68,7 @@
     <div class="space"></div>
     <h1>پرداخت با موفقیت انجام شد</h1>
     <div class="space"></div>
-        <p>کد رهگیری : 153412568</p>
-    <a href="">بازگشت به صفحه اصلی</a>
+    <p>کد رهگیری : 153412568</p>
 </div>
 </body>
 </html>
