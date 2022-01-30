@@ -70,6 +70,7 @@
     <div class="space"></div>
     <h1>پرداخت ناموفق</h1>
     <div class="space"></div>
+    {{$message}}
 </div>
 </body>
 </html>

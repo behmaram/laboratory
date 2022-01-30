@@ -29,6 +29,14 @@ class TurnController extends Controller
         ]);
         $turnTime = $request->turn_time;
         $testId = $request->test_id;
+
+        if ($turnTime <= now()){
+            return response()->json([
+                'data' => '',
+                'message' => 'تایم غیر مجاز (مجاز به انتخاب تایم گذشته نیستید.)',
+                'status' => true]);
+        }
+
         $record = $this->turnObj->checkReservation($turnTime);
 
         if ($record) {
@@ -55,7 +63,7 @@ class TurnController extends Controller
         //     else{
         //         $testCondition .=  $testInfo->description;
         //     }
-           
+
         //     $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
         //     $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
         //     $messageObj->sendEmail($user->email, $emailData ,'email.conditionTest');

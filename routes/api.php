@@ -27,6 +27,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:nurse'])->group(function () {
     Route::post('user-test', 'TurnController@nurseSetTurn');
+
+    Route::group(['prefix' => 'nurse/turn'], function () {
+        Route::get('/all/{filter}', 'TurnController@getTests'); // nurse
+        Route::post('/set-result', 'TurnController@setResult'); // nurse
+    });
+
+    //-------------------------- device api -------------------------
+    Route::group(['prefix' => 'device'], function () {
+        Route::post('/create', 'DeviceController@create'); //nurse
+        Route::get('/list', 'DeviceController@get');
+        Route::post('/end', 'DeviceController@notifForEnd'); // nurse
+        Route::post('/become-end', 'DeviceController@notifForBecomeToEnd'); // nurse
+        Route::post('/broken', 'DeviceController@notifForBroken'); // nurse
+    });
+    //-------------------------end device api -----------------------
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -42,10 +57,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::post('/list-turn', 'TurnController@getDoneTurn'); // user
         Route::get('/get-result/{id}', 'TurnController@getResult'); //user
     });
-    Route::group(['prefix' => 'nurse/turn'], function () {
-        Route::get('/all/{filter}', 'TurnController@getTests'); // nurse
-        Route::post('/set-result', 'TurnController@setResult'); // nurse
-    });
+
    //---------------------- end turn api-----------------
 
        // --------------------- doctor api--------------------
@@ -53,19 +65,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/list', 'DoctorController@getDoctors'); // login
     });
    //------------------------ end doctor api-----------------
-    
+
 //});
-    //-------------------------- device api -------------------------
-    Route::group(['prefix' => 'device'], function () {
-        Route::post('/create', 'DeviceController@create'); //nurse
-        Route::get('/list', 'DeviceController@get');
-        Route::post('/end', 'DeviceController@notifForEnd'); // nurse
-        Route::post('/become-end', 'DeviceController@notifForBecomeToEnd'); // nurse
-        Route::post('/broken', 'DeviceController@notifForBroken'); // nurse
-    });
-    //-------------------------end device api -----------------------
 
     Route::post('purchase', 'UserController@purchase');
-
 
 });

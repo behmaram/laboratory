@@ -14,4 +14,5 @@ readme file
 3. run ```php artisan key:generate```
 4. run ```php artisan passport:install```
 6. run `composer dump-autoload`
+7. run `php artisan run:test`
 

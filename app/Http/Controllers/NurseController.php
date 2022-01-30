@@ -42,16 +42,21 @@ class NurseController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'mobile' => 'required|regex:/^(09)[0-9]{9}/|unique:users,mobile',
+//            'mobile' => 'required|regex:/^(09)[0-9]{9}/|unique:users,mobile',
             'password' => 'required',
             'national_code' => 'required',
             'email' => 'required|email',
         ]);
 
-        $user = User::where('id', $id)->upadte($request->all());
+        User::where('id', $id)->update(
+            ['name' => $request->name,
+            'email' => $request->email,
+            'national_code' => $request->national_code,
+            'password' => $request->password,
+                ]);
 
         return response()
-            ->json(['data' => $user,
+            ->json(['data' => '',
                 'message' => 'باموفقیت ویرایش شد',
                 'status' => true]);
     }

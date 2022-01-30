@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Test;
 use App\Models\Transaction;
 use App\Models\Turn;
 use App\Models\User;
@@ -15,9 +16,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Classes\MessageClass;
 class UserController extends Controller
 {
-    public function __construct(Turn $turnObj)
+    public function __construct(Turn $turnObj, Test $testObj)
     {
         $this->turnObj = $turnObj;
+        $this->testObj = $testObj;
     }
 
     public function signUp(Request $request)
@@ -92,9 +94,10 @@ class UserController extends Controller
     {
         try {
             $paids = Turn::where('user_id', $userId)->where('payment', 0)->get();
-            $transaction = Transaction::where('user_id', $userId)->where('status', 0)->first();
-            $receipt = Payment::amount($transaction->price)->transactionId($transaction->transaction_id)->verify();
+            $transactions = Transaction::where('user_id', $userId)->where('status', 0)->get();
+            $prices = array_sum($transactions->pluck('price')->toArray());
 
+            $receipt = Payment::amount($prices)->transactionId($transactions[0]->transaction_id)->verify();
             $messageObj = new MessageClass();
             $testCondition = '';
             foreach ($paids as $paid) {
@@ -108,12 +111,14 @@ class UserController extends Controller
                     else{
                         $testCondition .=  $testInfo->description;
                     }
-                   
+
                     $testCondition .= "\n"." آزمایش ".$testInfo->name." تقریبا ".$testInfo->estimate." روز بعد از انجام آزمایش آماده ی تحویل است. ";
 
-        
-                  
-                $paid->update(['payment' => 1, 'status' => 1, 'reference_id' => $receipt->getReferenceId()]);
+                $paid->update(['payment' => 1]);
+            }
+
+            foreach ($transactions as $transaction) {
+                $transaction->update(['status' => 1, 'reference_id' => $receipt->getReferenceId()]);
             }
             try {
             $emailData = array('title' => 'آزمایشگاه الزهرا', 'message' => $testCondition);
@@ -125,7 +130,12 @@ class UserController extends Controller
             return view('success');
         } catch (InvalidPaymentException $exception) {
             if ($exception->getCode() < 0) {
-                return view('error');
+                $transactions = Transaction::where('user_id', $userId)->where('status', 0)->get();
+
+                foreach ($transactions as $transaction) {
+                    $transaction->update(['status' => 2]);
+                }
+                return view('error', ['message' => $exception->getMessage()]);
             }
         }
     }

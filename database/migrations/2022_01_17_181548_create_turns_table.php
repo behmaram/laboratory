@@ -19,8 +19,8 @@ class CreateTurnsTable extends Migration
             $table->foreignId('test_id')->references('id')->on('tests');
             $table->timestamps('turn_time');
             $table->integer('result')->nullable();
-            $table->integer('done');
-            $table->integer('payment');
+            $table->integer('done')->nullable();
+            $table->integer('payment')->default(0);
             $table->timestamps();
         });
     }
