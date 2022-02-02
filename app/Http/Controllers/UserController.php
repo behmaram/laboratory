@@ -100,6 +100,9 @@ class UserController extends Controller
             $receipt = Payment::amount($prices)->transactionId($transactions[0]->transaction_id)->verify();
             $messageObj = new MessageClass();
             $testCondition = '';
+            $transactions->each(function ($item) {
+               $item->update(['status' => 1]);
+            });
             foreach ($paids as $paid) {
 
                     $user = User::find($paid->user_id);
