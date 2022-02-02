@@ -91,6 +91,10 @@ class Turn extends Model
         }
     }
 
+    public function unpaid(){
+        $records = self::whereDate('turn_time',date('Y-m-d',strtotime("-1 days")))->where('payment',0)->get();
+         return $records;
+    }
     public function test() {
         return $this->belongsTo(Test::class);
     }
